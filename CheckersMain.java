@@ -19,12 +19,10 @@ public class CheckersMain {
 	 */
 	public void runGame() {
 		board = new Board();
-		//System.out.println("Word your moves as Letter, then Number of the spot, Example: A1\n");
-		this.pcs.firePropertyChange("instruction_alert", null, "Word your moves as Letter, then Number of the spot, Example: A1\n");
 	}
 
 	public void makeMove(int px, int py, int sx, int sy) {
-		board.printBoard();
+		//board.printBoard();
 		if (board.getWon()) {
 			String winner="Red";
 			if(board.getWinner().equals("X")) {
@@ -32,9 +30,8 @@ public class CheckersMain {
 			}
 			this.pcs.firePropertyChange("label", null, winner+" Wins!");
 		}else {
-			//board.printBoard();
-			//System.out.print("Current Player: ");
 			try {
+				//checks for the correct team playing
 			if (board.getPlayer()!=board.getSpotBool(px,py)) {
 				this.pcs.firePropertyChange("error", null, "Pick a piece that is your color");
 				return;

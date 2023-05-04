@@ -53,14 +53,9 @@ public class Board {
 				} else {
 					pieceBoard[i][j] = new Checker();
 				}
-//				pieceBoard[i][j] = new Checker();
 				gameBoard[i][j] = pieceBoard[i][j].getLabel();
 			}
 		}
-//		pieceBoard[0][1] = new Checker(true, 0, 1);
-//		gameBoard[0][1] = pieceBoard[0][1].getLabel();
-//		pieceBoard[7][0] = new Checker(false, 7, 0);
-//		gameBoard[7][0] = pieceBoard[7][0].getLabel();
 	}
 
 	/**
@@ -84,7 +79,7 @@ public class Board {
 	private boolean checkCap(int x, int y, int xn, int yn) {
 		// checks if enemy piece is in diagonally in between the player and an empty
 		// spot
-		// this line of code finds the diagonal spot in between the player spot and the
+		// this code finds the diagonal spot in between the player spot and the
 		// spot being moved to, to check if there is a piece to capture in the middle
 		// and the spot being jumped to is empty
 		int offsetX=-1;
@@ -102,12 +97,6 @@ public class Board {
 		}catch( Exception e) {
 			return false;
 		}
-//		if((player&&pieceBoard[Math.min(x,xn)+1][Math.min(y,yn)+1].getTeam()=='o'&&pieceBoard[xn][yn].getTeam()=='n')
-//		||(!player&&pieceBoard[Math.min(x,xn)+1][Math.min(y,yn)+1].getTeam()=='x'&&pieceBoard[xn][yn].getTeam()=='n')){
-//			if(Math.abs((Math.min(x,xn)+1)-x-xn)==Math.abs((Math.min(y,yn)+1)-y-yn)) {
-//			return true;
-//			}
-//		}
 		return false;
 	}
 

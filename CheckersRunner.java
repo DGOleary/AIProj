@@ -196,10 +196,7 @@ public void handle(ActionEvent arg0) {
 }
 
 public void propertyChange(PropertyChangeEvent evt) {
-	if(evt.getPropertyName().equals("instruction_alert")) {
-		alert= new Alert(AlertType.NONE, (String) evt.getNewValue(), ButtonType.CLOSE);
-		alert.show();
-	}else if(evt.getPropertyName().equals("label")) {
+	 if(evt.getPropertyName().equals("label")) {
 		output.setText((String) evt.getNewValue());
 	}else if(evt.getPropertyName().equals("error")) {
 		alert= new Alert(AlertType.NONE, (String) evt.getNewValue(), ButtonType.CLOSE);
