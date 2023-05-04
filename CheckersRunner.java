@@ -20,9 +20,10 @@ import javafx.stage.Stage;
 
 public class CheckersRunner extends Application implements PropertyChangeListener, EventHandler<ActionEvent>{
 	Scene scene;
+	//array of the squares on board
 	Button[][] buttons;
+	//array of the checker pieces on board
 	Button[][] checkers;
-	int[][][] locations;
 	Button clear;
 	GridPane grid;
 	BorderPane root;
@@ -34,9 +35,6 @@ public class CheckersRunner extends Application implements PropertyChangeListene
 	int pieceY;
 	CheckersMain main;
 public static void main(String args[]) {
-	//when the GUI is implemented this will be the class that controls the view and receives information from the CheckersMain
-	//CheckersMain main=new CheckersMain();
-	//main.runGame();
 	launch(args);
 }
 
@@ -77,27 +75,22 @@ public void createGame(Stage primaryStage) {
 	main.addPropertyChangeListener(this);
 	main.addBoardPropertyChangeListener(this);
 	scene = new Scene(root, 400, 450);
-	stage=primaryStage;
 	output.setText("Black's turn");
+	stage=primaryStage;
 	buttons=new Button[8][8];
 	int xVal=0;
+	//values for the piece chosen, start as nothing on board
 	pieceX=-1;
 	pieceY=-1;
-//	Button jeff=new Button();
-//	jeff.setPrefSize(50, 50);
-//	jeff.setShape(new Rectangle(50, 50));
-//	grid.add(jeff, xVal, yVal);
 	for(int i=0;i<8;i++) {
 		int yVal=0;
 		for(int j=0;j<8;j++) {
 			int fi=i, fj=j;
 			buttons[i][j] = new Button();
 			buttons[i][j].setOnAction(e -> {
-//				System.out.println(pieceX);
-//				System.out.println(pieceY);
-//				System.out.println((GridPane.getRowIndex(buttons[fi][fj])/50));
-//				System.out.println((GridPane.getColumnIndex(buttons[fi][fj])/50));
+				//move is made by clicking on a piece, and then a box on the board, gives an error to the player if it's not done correctly and lets them choose again
 				main.makeMove(pieceX, pieceY, (GridPane.getRowIndex(buttons[fi][fj])/50), (GridPane.getColumnIndex(buttons[fi][fj])/50));
+				//reset piece choice after a move is attempted
 				pieceX=-1;
 				pieceY=-1;
 			});
@@ -118,6 +111,7 @@ public void createGame(Stage primaryStage) {
 	checkers=new Button[8][8];
 	for(int i=0;i<3;i++) {		///// set to 3
 		int yVal;
+		//k is used to offset the pieces so they are on the right color of squares
 		int k;
 		//offset to make sure it is on the right color spots on the board
 		if((i%2)==0) {
@@ -129,19 +123,14 @@ public void createGame(Stage primaryStage) {
 		}
 		for(int j=k;j<8;j+=2) {
 			int fi=i, fj=j;
-			
 			checkers[i][j]=new Button();
 			checkers[i][j].setOnAction(e -> {
-//				System.out.println("test");
-//				System.out.println(checkers[fi][fj]);
-//				System.out.println(fi);
-//				System.out.println(fj);
-//				pieceX=(GridPane.getRowIndex(checkers[fi][fj])/50);
-//				pieceY=(GridPane.getColumnIndex(checkers[fi][fj])/50);
+				//button gets itself and sets the piece locations to it's row and column
+				System.out.println("fire");
 				Button temp = (Button) e.getSource();
 				pieceX=(GridPane.getRowIndex(temp)/50);
 				pieceY=(GridPane.getColumnIndex(temp)/50);
-				//checks with it's position on the board so it updates instantly and doesn't need to be clicked again
+				//checks if the piece should be styled as a king piece
 				if(main.kingGet(pieceX, pieceY)) {
 					temp.setStyle("-fx-border-color: gold; -fx-color: black;");
 					}
@@ -176,8 +165,7 @@ public void createGame(Stage primaryStage) {
 			int fi=i, fj=j;
 			checkers[i][j]=new Button();
 			checkers[i][j].setOnAction(e -> {
-//				pieceX=(GridPane.getRowIndex(checkers[fi][fj])/50);
-//				pieceY=(GridPane.getColumnIndex(checkers[fi][fj])/50);
+				System.out.println("fire");
 				Button temp = (Button) e.getSource();
 				pieceX=(GridPane.getRowIndex(temp)/50);
 				pieceY=(GridPane.getColumnIndex(temp)/50);
@@ -196,17 +184,6 @@ public void createGame(Stage primaryStage) {
 		}
 		xVal-=50;
 	}
-	//test checker
-//	Button checker=new Button();
-//	checker.setPrefSize(45, 45);
-//	checker.setShape(new Circle(22.5));
-//	checker.setStyle("-fx-border-color: black; -fx-color: black;");
-//	// Set the circle's position within the button
-//	checker.setTranslateX(2.5);
-//	checker.setTranslateY(-1);
-//	grid.add(checker, 0, 0);
-//	grid.getChildren().remove(checker);
-//	grid.add(checker, 100, 100);
 	stage.setScene(scene);
 	stage.show();
 	
@@ -233,22 +210,11 @@ public void propertyChange(PropertyChangeEvent evt) {
 		checkers[spot[0]][spot[1]]=null;
 	}else if(evt.getPropertyName().equals("move")) {
 		int[] oldSpot= (int[]) evt.getOldValue();
-//		System.out.println("old");
-//		System.out.println(oldSpot[0]);
-//		System.out.println(oldSpot[1]);
 		int[] spot= (int[]) evt.getNewValue();
-//		System.out.println("new");
-//		System.out.println(spot[0]);
-//		System.out.println(spot[1]);
 		grid.getChildren().remove(checkers[oldSpot[0]][oldSpot[1]]);
 		grid.add(checkers[oldSpot[0]][oldSpot[1]], spot[1]*50, spot[0]*50);
 		checkers[spot[0]][spot[1]]=checkers[oldSpot[0]][oldSpot[1]];
 		checkers[oldSpot[0]][oldSpot[1]]=new Button();
-		if(main.kingGet(spot[0], spot[1])) {
-			checkers[spot[0]][spot[1]].setStyle("-fx-border-color: gold; -fx-color: black;");
-			}
-//		System.out.println(GridPane.getRowIndex(checkers[spot[0]][spot[1]])/50);
-//		System.out.println(GridPane.getColumnIndex(checkers[spot[0]][spot[1]])/50);
 	}else if(evt.getPropertyName().equals("turn")) {
 		if((boolean) evt.getNewValue()) {
 			output.setText("Black's turn");

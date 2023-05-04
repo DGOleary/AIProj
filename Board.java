@@ -87,27 +87,27 @@ public class Board {
 		// this line of code finds the diagonal spot in between the player spot and the
 		// spot being moved to, to check if there is a piece to capture in the middle
 		// and the spot being jumped to is empty
-//		int offsetX=-1;
-//		int offsetY=-1;
-//		if(x<xn) {
-//			offsetX=1;
-//		}
-//		if(y<yn) {
-//			offsetY=1;
-//		}
-//		try {
-//		if(player&&!pieceBoard[x+offsetX][y+offsetY].getTeamBool()&&pieceBoard[xn][yn].getTeam()=='n') {
-//			
-//		}
-//		}catch( Exception e) {
-//			return false;
-//		}
-		if((player&&pieceBoard[Math.min(x,xn)+1][Math.min(y,yn)+1].getTeam()=='o'&&pieceBoard[xn][yn].getTeam()=='n')
-		||(!player&&pieceBoard[Math.min(x,xn)+1][Math.min(y,yn)+1].getTeam()=='x'&&pieceBoard[xn][yn].getTeam()=='n')){
-			if(Math.abs((Math.min(x,xn)+1)-x-xn)==Math.abs((Math.min(y,yn)+1)-y-yn)) {
-			return true;
-			}
+		int offsetX=-1;
+		int offsetY=-1;
+		if(x<xn) {
+			offsetX=1;
 		}
+		if(y<yn) {
+			offsetY=1;
+		}
+		try {
+		if((player!=pieceBoard[x+offsetX][y+offsetY].getTeamBool())&&pieceBoard[xn][yn].getTeam()=='n') {
+			return true;
+		}
+		}catch( Exception e) {
+			return false;
+		}
+//		if((player&&pieceBoard[Math.min(x,xn)+1][Math.min(y,yn)+1].getTeam()=='o'&&pieceBoard[xn][yn].getTeam()=='n')
+//		||(!player&&pieceBoard[Math.min(x,xn)+1][Math.min(y,yn)+1].getTeam()=='x'&&pieceBoard[xn][yn].getTeam()=='n')){
+//			if(Math.abs((Math.min(x,xn)+1)-x-xn)==Math.abs((Math.min(y,yn)+1)-y-yn)) {
+//			return true;
+//			}
+//		}
 		return false;
 	}
 

@@ -134,6 +134,14 @@ public class CheckersMain {
 		return board.getCheckKing(x,y);
 	}
 	
+	public boolean teamGet(int x,int y) {
+		try {
+		return board.getSpotBool(x,y);
+		} catch(Exception e) {
+			return false;
+		}
+	}
+	
 	/**
 	 * @param listener
 	 */
