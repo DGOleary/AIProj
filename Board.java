@@ -12,7 +12,7 @@ public class Board {
 	protected PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
 	/** The game board, the board that is printed out to the console. */
-	private String gameBoard[][];
+	private String gameBoard[][]; //make public static final int
 
 	/** The piece board, the board holding the checkers and the information. */
 	private Checker pieceBoard[][];
@@ -131,6 +131,11 @@ public class Board {
 		if (x < 0 || x > 7 || y < 0 || y > 7 || xn < 0 || xn > 7 || yn < 0 || yn > 7) {
 			return false;
 		}
+		//makes sure move is diagonal
+		if(x==xn||y==yn) {
+			return false;
+		}
+		
 		// checks for moving onto a piece
 		if (pieceBoard[xn][yn].getTeam() != 'n') {
 			return false;
@@ -347,6 +352,8 @@ public class Board {
 	 * @param x the x
 	 * @param y the y
 	 */
+	
+	//simply repeated code
 //caps another piece if there are multiple in a row
 	public void multiCap(int x, int y) {
 		if (player || getCheckKing(x, y)) {
@@ -361,7 +368,7 @@ public class Board {
 						makeMove(x, y, x + 2, y + 2);
 					}
 				}
-			} catch (Exception e) {
+			} catch (Exception e) { //Do something with the exception
 			}
 			try {
 				if (pieceBoard[x + 1][y - 1].getTeamBool() != player) {

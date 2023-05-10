@@ -22,7 +22,6 @@ public class CheckersMain {
 	}
 
 	public void makeMove(int px, int py, int sx, int sy) {
-		//board.printBoard();
 		if (board.getWon()) {
 			String winner="Red";
 			if(board.getWinner().equals("X")) {
@@ -52,6 +51,7 @@ public class CheckersMain {
 			}
 			
 		}
+		board.printBoard();
 	}
 	/**
 	 * Checks to make sure the move inputed is valid by the standards of the game.
@@ -95,6 +95,10 @@ public class CheckersMain {
 	 * @param y The y of the piece
 	 * @return true, if successful
 	 */
+	
+	//add public/private
+	//handle exception
+	//simplify code with loop
 	boolean possibleMoves(int x, int y) {
 		if (board.getPlayer() || board.getCheckKing(x, y)) {
 			try {
