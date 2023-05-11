@@ -122,6 +122,8 @@ public void createGame(Stage primaryStage) {
 				}else {
 				//current player is saved
 				currentPlayer=main.teamGet(pieceX, pieceY);
+				System.out.println(pieceX);
+				System.out.println(pieceY);
 				//move is made by clicking on a piece, and then a box on the board, gives an error to the player if it's not done correctly and lets them choose again
 				main.makeMove(pieceX, pieceY, (GridPane.getRowIndex(buttons[fi][fj])/50), (GridPane.getColumnIndex(buttons[fi][fj])/50));
 				//reset piece choice after a move is attempted

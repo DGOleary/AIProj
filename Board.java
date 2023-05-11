@@ -251,9 +251,18 @@ public class Board {
 			if (possibleCap(xn, yn) ) {
 				return 4;
 			} 
-			if(xn==3||xn==4) {
-				//2 is a move that helps control an important position
-				return 2;
+			if(x!=3||x!=4) {
+				//checks it's not already on one of those spots so it wont loop
+				if(xn==3||xn==4) {
+					//2 is a move that helps control an important position
+					return 2;
+				}
+			}
+			if(getCheckKing(x,y)) {
+				if(xn>x) {
+					//defending the back row is a better move than a regular move
+					return 2;
+				}
 			}
 			//1 is a regular move
 			return 1;

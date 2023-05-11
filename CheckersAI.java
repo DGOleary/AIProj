@@ -61,49 +61,6 @@ public class CheckersAI {
 		main.makeMove(moves[0], moves[1], moves[2], moves[3]);
 		util=-1;
 		moves=new int[4];
-//		while(!pieces.isEmpty()) {
-//			int spot[]=pieces.pop();
-//			int x=spot[0];
-//			int y=spot[1];
-//			//multicap moves always will go if they can execute
-//			spot=board.multiCapCheck(x, y);
-//			if(spot[0]!=-1) {
-//				if (main.makeMove(x, y, spot[0], spot[1])) break;;
-//	
-//			}
-//			
-//			if(board.possibleCap(x-2, y+2)) {
-//				if (main.makeMove(x, y, x-2, y+2)) break;;
-//				
-//			}
-//
-//			if(board.possibleCap(x-2, y-2)) {
-//				if (main.makeMove(x, y, x-2, y-2)) break;;
-//				
-//			}
-//			if(board.getCheckKing(x, y)) {
-////				if (main.makeMove(x, y, x+2, y+2)) break;
-////				if (main.makeMove(x, y, x+2, y-2)) break;		
-////				if (main.makeMove(x, y, x+1, y+1)) break;
-////				if (main.makeMove(x, y, x+1, y-1)) break;	
-//				if(board.possibleCap(x+2, y+2)) {
-//					if (main.makeMove(x, y, x+2, y+2)) break;;
-//					
-//				}
-//				if(board.possibleCap(x+2, y-2)) {
-//					if (main.makeMove(x, y, x+2, y-2)) break;;
-//					
-//				}
-//			}
-//			if(board.getCheckKing(x, y)) {
-//				if (main.makeMove(x, y, x+1, y+1)) break;
-//				if (main.makeMove(x, y, x+1, y-1)) break;
-//			}
-////			if (main.makeMove(x, y, x-2, y+2)) break;
-////			if (main.makeMove(x, y, x-2, y-2)) break;		
-//			if (main.makeMove(x, y, x-1, y+1)) break;
-//			if (main.makeMove(x, y, x-1, y-1)) break;	
-//		}
 	}
 	
 	private void checkUtil(int newUtil, int x, int y, int xn, int yn) {
