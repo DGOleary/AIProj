@@ -131,9 +131,9 @@ public void createGame(Stage primaryStage) {
 			});
 			Image image;
 			if((i+j)%2==0) {
-				image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\red.png");
+				image=new Image("Assets\\red.png");
 			}else {
-				image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\black.png");
+				image=new Image("Assets\\black.png");
 			}
 			ImageView imageView=new ImageView(image);
 			buttons[i][j].setPrefWidth(50);
@@ -161,7 +161,7 @@ public void createGame(Stage primaryStage) {
 		}
 		for(int j=k;j<8;j+=2) {
 			Image image;
-			image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\blackpiece.png");
+			image=new Image("Assets\\blackpiece.png");
 			ImageView imageView=new ImageView(image);
 			buttons[j][i].setGraphic(imageView);
 			yVal+=100;
@@ -185,7 +185,7 @@ public void createGame(Stage primaryStage) {
 		}
 		for(int j=k;j<8;j+=2) {
 		Image image;
-		image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\redpiece.png");
+		image=new Image("Assets\\redpiece.png");
 		ImageView imageView=new ImageView(image);
 		buttons[j][i].setGraphic(imageView);
 		yVal+=100;
@@ -214,38 +214,39 @@ public void propertyChange(PropertyChangeEvent evt) {
 		
 		
 		//alert.show();
+		//"Assets\\black.png"
 	}else if(evt.getPropertyName().equals("kill")) {
 		System.out.println("sdsd");
 		int[] spot= (int[]) evt.getNewValue();
 		Image image;
-		image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\black.png");
+		image=new Image("Assets\\black.png");
 		ImageView imageView=new ImageView(image);
 		buttons[spot[1]][spot[0]].setGraphic(imageView);
 	}else if(evt.getPropertyName().equals("move")) {
 		int[] oldSpot= (int[]) evt.getOldValue();
 		int[] spot= (int[]) evt.getNewValue();
 		Image image;
-		image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\black.png");
+		image=new Image("Assets\\black.png");
 		ImageView imageView=new ImageView(image);
 		buttons[oldSpot[1]][oldSpot[0]].setGraphic(imageView);
 		//checks if the piece should be styled as a king piece
 		if(currentPlayer) {
 			if(main.kingGet(spot[0], spot[1])) {
-				image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\blackking.png");
+				image=new Image("Assets\\blackking.png");
 				imageView=new ImageView(image);
 				buttons[spot[1]][spot[0]].setGraphic(imageView);
 			}else {
-				image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\blackpiece.png");
+				image=new Image("Assets\\blackpiece.png");
 				imageView=new ImageView(image);
 				buttons[spot[1]][spot[0]].setGraphic(imageView);
 			}
 			}else {
 				if(main.kingGet(spot[0], spot[1])) {
-					image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\redking.png");
+					image=new Image("Assets\\redking.png");
 					imageView=new ImageView(image);
 					buttons[spot[1]][spot[0]].setGraphic(imageView);
 				}else {
-					image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\redpiece.png");
+					image=new Image("Assets\\redpiece.png");
 					imageView=new ImageView(image);
 					buttons[spot[1]][spot[0]].setGraphic(imageView);
 				}
