@@ -25,11 +25,10 @@ public class CheckersRunner extends Application implements PropertyChangeListene
 	//array of the squares on board
 	private Button[][] buttons;
 	//array of the checker pieces on board
-	private Button[][] checkers;
-	//remove checkers, draw checkers on the board and rework lambdas
 	
 	private boolean currentPlayer;
 	private Button clear;
+	private Button players;
 	private GridPane grid;
 	private BorderPane root;
 	private BorderPane top;
@@ -39,12 +38,16 @@ public class CheckersRunner extends Application implements PropertyChangeListene
 	private int pieceX;
 	private int pieceY;
 	private CheckersMain main;
+	private boolean ai;
+	private CheckersAI aiPlayer;
+	
 public static void main(String args[]) {
 	launch(args);
 }
 
 public void start(Stage arg0) throws Exception {
 	try {
+		ai=false;
 		alert = new Alert(AlertType.NONE);
 		root = new BorderPane();
 		top = new BorderPane();
@@ -67,6 +70,26 @@ public void start(Stage arg0) throws Exception {
 			}
 		});
 		top.setRight(clear);
+		players = new Button();
+		players.setPrefHeight(10);
+		players.setText("2 Players");
+		players.setOnAction(e -> {
+			try {
+				ai=!ai;
+				if(ai){
+					players.setText("vs. AI");
+					aiPlayer=new CheckersAI();
+				}else {
+					players.setText("2 Players");
+				}
+				createGame(arg0);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		top.setLeft(players);
+		scene = new Scene(root, 400, 450);
 		createGame(arg0);
 	}catch(Exception e) {
 		e.printStackTrace();
@@ -75,11 +98,9 @@ public void start(Stage arg0) throws Exception {
 }
 
 public void createGame(Stage primaryStage) {
-	main=new CheckersMain();
-	main.runGame();
+	main=new CheckersMain(ai);
 	main.addPropertyChangeListener(this);
 	main.addBoardPropertyChangeListener(this);
-	scene = new Scene(root, 400, 450);
 	output.setText("Black's turn");
 	stage=primaryStage;
 	buttons=new Button[8][8];
@@ -111,16 +132,12 @@ public void createGame(Stage primaryStage) {
 			Image image;
 			if((i+j)%2==0) {
 				image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\red.png");
-				//buttons[i][j].setStyle("-fx-border-color: red; -fx-color: red;");
 			}else {
-				//buttons[i][j].setStyle("-fx-border-color: black; -fx-color: black;");
 				image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\black.png");
 			}
 			ImageView imageView=new ImageView(image);
-			//buttons[i][j].setMaxSize(50, 50);
 			buttons[i][j].setPrefWidth(50);
 			buttons[i][j].setPrefHeight(50);
-			//buttons[i][j].setShape(new Rectangle(50, 50));
 			buttons[i][j].setGraphic(imageView);
 			buttons[i][j].setStyle("-fx-padding: 0;");
 			grid.add(buttons[i][j], xVal, yVal);
@@ -130,7 +147,6 @@ public void createGame(Stage primaryStage) {
 	}
 	xVal=0;
 	//Adds black checkers
-	checkers=new Button[8][8];
 	for(int i=0;i<3;i++) {		///// set to 3
 		int yVal;
 		//k is used to offset the pieces so they are on the right color of squares
@@ -144,26 +160,6 @@ public void createGame(Stage primaryStage) {
 			yVal=0;
 		}
 		for(int j=k;j<8;j+=2) {
-//			int fi=i, fj=j;
-//			checkers[i][j]=new Button();
-//			checkers[i][j].setOnAction(e -> {
-//				//button gets itself and sets the piece locations to it's row and column
-//				System.out.println("fire");
-//				Button temp = (Button) e.getSource();
-//				pieceX=(GridPane.getRowIndex(temp)/50);
-//				pieceY=(GridPane.getColumnIndex(temp)/50);
-//				//checks if the piece should be styled as a king piece
-//				if(main.kingGet(pieceX, pieceY)) {
-//					temp.setStyle("-fx-border-color: gold; -fx-color: black;");
-//					}
-//			});
-//			checkers[i][j].setPrefSize(45, 45);
-//			checkers[i][j].setShape(new Circle(22.5));
-//			checkers[i][j].setStyle("-fx-border-color: grey; -fx-color: black;");
-//			//centers checker in square
-//			checkers[i][j].setTranslateX(2.5);
-//			checkers[i][j].setTranslateY(-1);
-//			grid.add(checkers[i][j], yVal, xVal);
 			Image image;
 			image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\blackpiece.png");
 			ImageView imageView=new ImageView(image);
@@ -188,24 +184,6 @@ public void createGame(Stage primaryStage) {
 			yVal=0;
 		}
 		for(int j=k;j<8;j+=2) {
-//			int fi=i, fj=j;
-//			checkers[i][j]=new Button();
-//			checkers[i][j].setOnAction(e -> {
-//				System.out.println("fire");
-//				Button temp = (Button) e.getSource();
-//				pieceX=(GridPane.getRowIndex(temp)/50);
-//				pieceY=(GridPane.getColumnIndex(temp)/50);
-//				if(main.kingGet(pieceX, pieceY)) {
-//					temp.setStyle("-fx-border-color: gold; -fx-color: red;");
-//					}
-//			});
-//			checkers[i][j].setPrefSize(45, 45);
-//			checkers[i][j].setShape(new Circle(22.5));
-//			checkers[i][j].setStyle("-fx-border-color: red; -fx-color: red;");
-//			//centers checker in square
-//			checkers[i][j].setTranslateX(2.5);
-//			checkers[i][j].setTranslateY(-1);
-//			grid.add(checkers[i][j], yVal, xVal);
 		Image image;
 		image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\redpiece.png");
 		ImageView imageView=new ImageView(image);
@@ -231,7 +209,11 @@ public void propertyChange(PropertyChangeEvent evt) {
 		output.setText((String) evt.getNewValue());
 	}else if(evt.getPropertyName().equals("error")) {
 		alert= new Alert(AlertType.NONE, (String) evt.getNewValue(), ButtonType.CLOSE);
-		alert.show();
+		//Change to text alert
+		
+		
+		
+		//alert.show();
 	}else if(evt.getPropertyName().equals("kill")) {
 		System.out.println("sdsd");
 		int[] spot= (int[]) evt.getNewValue();
@@ -239,8 +221,6 @@ public void propertyChange(PropertyChangeEvent evt) {
 		image=new Image("C:\\Users\\Mango T. Shih-tzu\\Desktop\\School\\CompSci\\Algo\\Checkers\\src\\checker\\Assets\\black.png");
 		ImageView imageView=new ImageView(image);
 		buttons[spot[1]][spot[0]].setGraphic(imageView);
-//		grid.getChildren().remove(checkers[spot[0]][spot[1]]);
-//		checkers[spot[0]][spot[1]]=null;
 	}else if(evt.getPropertyName().equals("move")) {
 		int[] oldSpot= (int[]) evt.getOldValue();
 		int[] spot= (int[]) evt.getNewValue();
@@ -270,16 +250,20 @@ public void propertyChange(PropertyChangeEvent evt) {
 					buttons[spot[1]][spot[0]].setGraphic(imageView);
 				}
 			}
-		
-		//grid.getChildren().remove(checkers[oldSpot[0]][oldSpot[1]]);
-		//grid.add(checkers[oldSpot[0]][oldSpot[1]], spot[1]*50, spot[0]*50);
-		//checkers[spot[0]][spot[1]]=checkers[oldSpot[0]][oldSpot[1]];
-		//checkers[oldSpot[0]][oldSpot[1]]=new Button();
 	}else if(evt.getPropertyName().equals("turn")) {
 		if((boolean) evt.getNewValue()) {
 			output.setText("Black's turn");
 		}else {
 			output.setText("Red's turn");
+			System.out.println(currentPlayer);
+			if(ai) {
+				currentPlayer=main.getPlayer();
+				aiPlayer.aiMove(main);
+				//5,6 4,7
+//				buttons[6][5].fire();
+//				buttons[4][7].fire();
+				//main.makeMove(aiMove[0],aiMove[1],aiMove[2],aiMove[3]);
+			}
 		}
 	}
 	

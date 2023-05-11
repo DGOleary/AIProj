@@ -17,30 +17,30 @@ public class CheckersMain {
 	/**
 	 * Main function that will run the game.
 	 */
-	public void runGame() {
+	public CheckersMain(boolean ai) {
 		board = new Board();
 	}
-
-	public void makeMove(int px, int py, int sx, int sy) {
+	public boolean makeMove(int px, int py, int sx, int sy) {
 		if (board.getWon()) {
 			String winner="Red";
 			if(board.getWinner().equals("X")) {
 				winner="Black";
 			}
 			this.pcs.firePropertyChange("label", null, winner+" Wins!");
+			return false;
 		}else {
 			try {
 				//checks for the correct team playing
 			if (board.getPlayer()!=board.getSpotBool(px,py)) {
 				this.pcs.firePropertyChange("error", null, "Pick a piece that is your color");
-				return;
+				return false;
 			} 
 			}catch (Exception e) {
 				this.pcs.firePropertyChange("error", null, "Pick a piece that is your color");
-				return;
+				return false;
 			}
 			if (!moveCheck(px, py)) {
-				return;
+				return false;
 			}
 			
 			//takes in error message or message that the move passed
@@ -48,10 +48,31 @@ public class CheckersMain {
 			if(!move.equals("pass")) {
 				System.out.println(move);
 				this.pcs.firePropertyChange("error", null, move);
+				return false;
 			}
 			
 		}
 		board.printBoard();
+		return true;
+	}
+	
+	public int testMove(int px, int py, int sx, int sy) {
+	
+			try {
+				//checks for the correct team playing
+			if (board.getPlayer()!=board.getSpotBool(px,py)) {
+				return -1;
+			} 
+			}catch (Exception e) {
+				return -1;
+			}
+			if (!moveCheck(px, py)) {
+				return -1;
+			}
+			
+			//takes in error message or message that the move passed
+			return board.testMove(px, py, sx, sy);
+			
 	}
 	/**
 	 * Checks to make sure the move inputed is valid by the standards of the game.
@@ -143,6 +164,13 @@ public class CheckersMain {
 		}
 	}
 	
+	public Board getBoard() {
+		return board;
+	}
+	
+	public boolean getPlayer() {
+		return board.getPlayer();
+	}
 	/**
 	 * @param listener
 	 */

@@ -30,6 +30,7 @@ public class Board {
 
 	/** The o count. */
 	private int oCount;
+	
 
 	/**
 	 * Instantiates a new board.
@@ -239,6 +240,29 @@ public class Board {
 		return "Illegal Move";
 	}
 
+	//AI can use this to test a move
+	public int testMove(int x, int y, int xn, int yn) {
+		if (validMove(x, y, xn, yn)) {
+			if (checkCap(x, y, xn, yn)) {
+				//3 is a capture
+				return 3;	
+			} 
+			//4 is a multicapture
+			if (possibleCap(xn, yn) ) {
+				return 4;
+			} 
+			if(xn==3||xn==4) {
+				//2 is a move that helps control an important position
+				return 2;
+			}
+			//1 is a regular move
+			return 1;
+		}
+		//-1 is an illegal move
+		return -1;
+		
+	}
+	
 	/**
 	 * Gets if the game is won.
 	 *
@@ -300,6 +324,9 @@ public class Board {
 //checks if there is a possible capture to make and forces the player to make it if so
 //takes in the location of the piece to be moved
 	public boolean possibleCap(int x, int y) {
+		if (x < 0 || x > 7 || y < 0 || y > 7 ) {
+			return false;
+		}
 		// checks in every direction the piece is able to move
 		if (player || getCheckKing(x, y)) {
 			try {
@@ -402,6 +429,49 @@ public class Board {
 		}
 	}
 
+	//function to AI to check for a multicap
+	public int[] multiCapCheck(int x, int y) {
+		if (player || getCheckKing(x, y)) {
+			try {
+				if (pieceBoard[x + 1][y + 1].getTeamBool() != player) {
+					// same checks as the possible cap function
+					if ((x + 2) < 8 && (y + 2) < 8 && pieceBoard[x + 2][y + 2].getLabel().equals("|_|")) {
+						// makes the move for the player because they would be forced to anyways
+						return new int[] {x + 2, y + 2};
+					}
+				}
+			} catch (Exception e) { //Do something with the exception
+			}
+			try {
+				if (pieceBoard[x + 1][y - 1].getTeamBool() != player) {
+					if ((x + 2) < 8 && (y - 2) > -1 && pieceBoard[x + 2][y - 2].getLabel().equals("|_|")) {
+						return new int[] {x + 2, y - 2};
+					}
+				}
+			} catch (Exception e) {
+			}
+		}
+		if (!player || getCheckKing(x, y)) {
+			try {
+				if (pieceBoard[x - 1][y + 1].getTeamBool() != player) {
+					if ((x - 2) > -1 && (y + 2) < 8 && pieceBoard[x - 2][y + 2].getLabel().equals("|_|")) {
+						return new int[] {x - 2, y + 2};
+					}
+				}
+			} catch (Exception e) {
+			}
+			try {
+				if (pieceBoard[x - 1][y - 1].getTeamBool() != player) {
+					if ((x - 2) > -1 && (y - 2) > -1 && pieceBoard[x - 2][y - 2].getLabel().equals("|_|")) {
+						return new int[] {x - 2, y - 2};
+					}
+				}
+			} catch (Exception e) {
+			}
+		}
+		return new int[] {-1, -1};
+	}
+	
 	/**
 	 * @param listener
 	 */
