@@ -240,6 +240,9 @@ public class Board {
 		return "Illegal Move";
 	}
 
+	//TODO make pieces avoid picking a spot that will endanger another piece
+	
+	//move AI methods to AI class
 	//AI can use this to test a move
 	public int testMove(int x, int y, int xn, int yn) {
 		if (validMove(x, y, xn, yn)) {
@@ -247,10 +250,14 @@ public class Board {
 				//3 is a capture
 				return 3;	
 			} 
-			//4 is a multicapture
-			if (possibleCap(xn, yn) ) {
+			if(possibleCapped(x,y,xn,yn)) {
+				//0 is a move that gets captured but it's a 0 so it will be chosen if there are no other possible moves to make
+				return 0;
+			}
+			if(possibleCapped(x,y)&&!possibleCapped(x,y,xn,yn)) {
+				//4 is a move that evades a capture
 				return 4;
-			} 
+			}
 			if(x!=3||x!=4) {
 				//checks it's not already on one of those spots so it wont loop
 				if(xn==3||xn==4) {
@@ -263,6 +270,12 @@ public class Board {
 					//defending the back row is a better move than a regular move
 					return 2;
 				}
+			}
+			if(!getCheckKing(x,y)) {
+					if(xn>x) {
+						//helps lead pieces to the back row to get kinged
+						return 2;
+					}
 			}
 			//1 is a regular move
 			return 1;
@@ -380,7 +393,109 @@ public class Board {
 		return false;
 
 	}
-
+	
+	
+	
+	//method for AI to see if it will be captured
+	public boolean possibleCapped(int x, int y) {
+		if (x < 0 || x > 7 || y < 0 || y > 7 ) {
+			return false;
+		}
+		//checks if the pieces around it are able to cap the piece
+		try {
+		if(pieceBoard[x-1][y-1].getTeam()=='x') {
+			if(pieceBoard[x+1][y+1].getTeam()=='n') {
+				return true;
+			}
+			if(pieceBoard[x-1][y+1].getTeam()=='x'&&pieceBoard[x+1][y-1].getTeam()=='n') {
+				return true;
+			}
+		}
+		}catch(Exception e) {	
+		}
+		
+		try {
+			if(pieceBoard[x-1][y+1].getTeam()=='x') {
+				if(pieceBoard[x+1][y-1].getTeam()=='n') {
+					return true;
+				}
+				if(pieceBoard[x-1][y-1].getTeam()=='x'&&pieceBoard[x+1][y+1].getTeam()=='n') {
+					return true;
+				}
+			}
+			}catch(Exception e) {	
+			}
+		try {
+			if(pieceBoard[x+1][y+1].getTeam()=='x'&&pieceBoard[x+1][y+1].getKing()) {
+				if(pieceBoard[x-1][y-1].getTeam()=='n') {
+					return true;
+				}
+				if(pieceBoard[x+1][y-1].getTeam()=='x'&&pieceBoard[x-1][y+1].getTeam()=='n') {
+					return true;
+				}
+			}
+			}catch(Exception e) {	
+			}
+		try {
+			if(pieceBoard[x+1][y-1].getTeam()=='x'&&pieceBoard[x+1][y+1].getKing()) {
+				if(pieceBoard[x-1][y+1].getTeam()=='n') {
+					return true;
+				}
+				if(pieceBoard[x+1][y+1].getTeam()=='x'&&pieceBoard[x-1][y-1].getTeam()=='n') {
+					return true;
+				}
+			}
+			}catch(Exception e) {	
+			}
+		return false;
+	}
+	
+	//version of the method to check before making a move, it accounts for the board not being in the new state
+	public boolean possibleCapped(int x, int y, int xn, int yn) {
+		//checks if its a capture move and exits if it is
+		if(Math.abs(x-xn)==2) {
+			return false;
+		}
+		if (x < 0 || x > 7 || y < 0 || y > 7 ||xn < 0 || xn > 7 || yn < 0 || yn > 7 ) {
+			return false;
+		}
+		//checks if the pieces around it are able to cap the piece
+		try {
+			if(pieceBoard[xn+1][yn-1].getTeam()=='x'&&pieceBoard[xn+1][yn-1].getKing()) {
+				//checks to make sure the points are on the same diagonal
+				if((Math.abs((xn+1)-x)==Math.abs((yn-1)-y))||pieceBoard[xn-1][yn+1].getTeam()=='n') {
+					return true;
+				}
+			}
+			}catch(Exception e) {	
+			}
+		try {
+			if(pieceBoard[xn+1][yn+1].getTeam()=='x'&&pieceBoard[xn+1][yn+1].getKing()) {
+				if((Math.abs((xn+1)-x)==Math.abs((yn+1)-y))||pieceBoard[xn-1][yn-1].getTeam()=='n') {
+					return true;
+				}
+			}
+			}catch(Exception e) {	
+			}
+		try {
+			if(pieceBoard[xn-1][yn-1].getTeam()=='x') {
+				//if the enemy piece is not a king then it must be coming from a direction it can capture in
+				if((Math.abs((xn-1)-x)==Math.abs((yn-1)-y))||pieceBoard[xn+1][yn+1].getTeam()=='n') {
+					return true;
+				}
+			}
+			}catch(Exception e) {	
+			}
+		try {
+			if(pieceBoard[xn-1][yn+1].getTeam()=='x') {
+				if((Math.abs((xn-1)-x)==Math.abs((yn+1)-y))||pieceBoard[xn+1][yn-1].getTeam()=='n') {
+					return true;
+				}
+			}
+			}catch(Exception e) {	
+			}
+		return false;
+	}
 	/**
 	 * Multicapture function that allows for a double move when a move is made that
 	 * opens the player up to capturing another piece immediately.

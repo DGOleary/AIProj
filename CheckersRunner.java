@@ -113,6 +113,7 @@ public void createGame(Stage primaryStage) {
 		for(int j=0;j<8;j++) {
 			int fi=i, fj=j;
 			buttons[i][j] = new Button();
+			if((i+j)%2==1) {
 			buttons[i][j].setOnAction(e -> {
 				if(pieceX==-1) {
 					//button gets itself and sets the piece locations to it's row and column
@@ -122,8 +123,8 @@ public void createGame(Stage primaryStage) {
 				}else {
 				//current player is saved
 				currentPlayer=main.teamGet(pieceX, pieceY);
-				System.out.println(pieceX);
-				System.out.println(pieceY);
+//				System.out.println(pieceX);
+//				System.out.println(pieceY);
 				//move is made by clicking on a piece, and then a box on the board, gives an error to the player if it's not done correctly and lets them choose again
 				main.makeMove(pieceX, pieceY, (GridPane.getRowIndex(buttons[fi][fj])/50), (GridPane.getColumnIndex(buttons[fi][fj])/50));
 				//reset piece choice after a move is attempted
@@ -131,6 +132,7 @@ public void createGame(Stage primaryStage) {
 				pieceY=-1;
 				}
 			});
+			}
 			Image image;
 			if((i+j)%2==0) {
 				image=new Image("Assets\\red.png");
@@ -214,11 +216,9 @@ public void propertyChange(PropertyChangeEvent evt) {
 		//Change to text alert
 		
 		
-		
+		System.out.println((String) evt.getNewValue());
 		//alert.show();
-		//"Assets\\black.png"
 	}else if(evt.getPropertyName().equals("kill")) {
-		System.out.println("sdsd");
 		int[] spot= (int[]) evt.getNewValue();
 		Image image;
 		image=new Image("Assets\\black.png");

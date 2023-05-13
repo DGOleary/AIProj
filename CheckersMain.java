@@ -52,7 +52,7 @@ public class CheckersMain {
 			}
 			
 		}
-		board.printBoard();
+//		board.printBoard();
 		return true;
 	}
 	
