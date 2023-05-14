@@ -52,35 +52,18 @@ public class CheckersMain {
 			}
 			
 		}
-//		board.printBoard();
+		board.printBoard();
 		return true;
 	}
 	
-	public int testMove(int px, int py, int sx, int sy) {
 	
-			try {
-				//checks for the correct team playing
-			if (board.getPlayer()!=board.getSpotBool(px,py)) {
-				return -1;
-			} 
-			}catch (Exception e) {
-				return -1;
-			}
-			if (!moveCheck(px, py)) {
-				return -1;
-			}
-			
-			//takes in error message or message that the move passed
-			return board.testMove(px, py, sx, sy);
-			
-	}
 	/**
 	 * Checks to make sure the move inputed is valid by the standards of the game.
 	 *
 	 * @param m The string of the move
 	 * @return true, if successful
 	 */
-	private boolean moveCheck(int x, int y) {
+	public boolean moveCheck(int x, int y) {
 		if (x<0||y<0) {
 				this.pcs.firePropertyChange("error", null, "Incorrect move, pick a piece before picking a spot to move to");
 				return false;
@@ -121,33 +104,43 @@ public class CheckersMain {
 	//handle exception
 	//simplify code with loop
 	boolean possibleMoves(int x, int y) {
-		if (board.getPlayer() || board.getCheckKing(x, y)) {
-			try {
-				if (board.validMove(x, y, x + 1, y + 1)) {
-					return true;
+		try {
+			if (board.getSpotBool(x, y) || board.getCheckKing(x, y)) {
+				try {
+					if (board.validMove(x, y, x + 1, y + 1)) {
+						return true;
+					}
+				} catch (Exception e) {
 				}
-			} catch (Exception e) {
-			}
-			try {
-				if (board.validMove(x, y, x + 1, y - 1)) {
-					return true;
+				try {
+					if (board.validMove(x, y, x + 1, y - 1)) {
+						return true;
+					}
+				} catch (Exception e) {
 				}
-			} catch (Exception e) {
 			}
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		if (!board.getPlayer() || board.getCheckKing(x, y)) {
-			try {
-				if (board.validMove(x, y, x - 1, y + 1)) {
-					return true;
+		try {
+			if (!board.getSpotBool(x, y) || board.getCheckKing(x, y)) {
+				try {
+					if (board.validMove(x, y, x - 1, y + 1)) {
+						return true;
+					}
+				} catch (Exception e) {
 				}
-			} catch (Exception e) {
-			}
-			try {
-				if (board.validMove(x, y, x - 1, y - 1)) {
-					return true;
+				try {
+					if (board.validMove(x, y, x - 1, y - 1)) {
+						return true;
+					}
+				} catch (Exception e) {
 				}
-			} catch (Exception e) {
 			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return false;
 	}

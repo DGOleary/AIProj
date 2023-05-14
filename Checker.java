@@ -8,7 +8,7 @@ package checker;
  *         Class that represents a spot on a checker board, being empty or
  *         having a piece on it
  */
-public class Checker {
+public class Checker implements Cloneable{
 	private boolean king;
 	private char team;
 	private int x;
@@ -104,6 +104,24 @@ public class Checker {
 	 */
 	public String getLabel() {
 		return label;
+	}
+	
+	protected Object clone() throws CloneNotSupportedException{
+		Checker temp=new Checker();
+		try {
+			temp.king=this.king;
+			temp.team=this.team;
+			temp.x=this.x;
+			temp.y=this.y;
+			temp.label=this.label;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(this.getKing()) {
+			temp.makeKing();
+		}
+		return temp;
 	}
 
 }

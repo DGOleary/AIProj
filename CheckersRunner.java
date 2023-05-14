@@ -216,7 +216,7 @@ public void propertyChange(PropertyChangeEvent evt) {
 		//Change to text alert
 		
 		
-		System.out.println((String) evt.getNewValue());
+		//System.out.println((String) evt.getNewValue());
 		//alert.show();
 	}else if(evt.getPropertyName().equals("kill")) {
 		int[] spot= (int[]) evt.getNewValue();
