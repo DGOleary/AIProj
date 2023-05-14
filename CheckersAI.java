@@ -2,6 +2,8 @@ package checker;
 
 import java.util.Stack;
 
+//TODO IMPORTANT MAKE GAME ACTUALLY MAKE 3 BOARDS TO PICK A BEST RESULT
+
 //TODO re-enable error messages and find out why game sometimes freezes
 //TODO make the pieces be able to chase or run
 //TODO bring AI methods from the board class to this class
@@ -19,6 +21,8 @@ public class CheckersAI {
 	private Board board;
 	private CheckersMain main;
 	public void aiMove(CheckersMain main) {
+		maxUtil=new int[3];
+		maxMoves=new int[3][4];
 		this.main=main;
 		try {
 			board=(Board)main.getBoard().clone();
@@ -98,18 +102,29 @@ public class CheckersAI {
 			maxMoves= moves.clone();
 		}else {
 			//adds util to total
+			for(int i=0;i<3;i++) {
 			if(board.getPlayer()) {
-				if(util[k]<0) {
-					maxUtil[k]+=util[k];
+				if(util[i]<0) {
+					maxUtil[i]+=util[i];
 				}else {
-					maxUtil[k]-=util[k];
+					maxUtil[i]-=util[i];
 				}
 			}else {
-				maxUtil[k]+=util[k];
+				maxUtil[i]+=util[i];
+			}
 			}
 		}
-		board.makeMove(moves[k][0], moves[k][1], moves[k][2], moves[k][3]);
-		
+		//find the best test move and execute it
+		if(k<2) {
+		int maxInd=0, maxVal=-200;
+		for(int i=0;i<3;i++) {
+			if(maxVal<maxUtil[i]) {
+				maxVal=maxUtil[i];
+				maxInd=i;
+			}
+		}
+		board.makeMove(moves[maxInd][0], moves[maxInd][1], moves[maxInd][2], moves[maxInd][3]);
+		}
 		//resets the util
 		util=new int[] {-1,-1,-1};
 		moves=new int[3][4];
@@ -129,8 +144,14 @@ public class CheckersAI {
 	private void checkUtil(int newUtil, int x, int y, int xn, int yn) {
 		for(int i=0;i<3;i++) {
 		if(newUtil>util[i]) {
+			for(int j=2-i;j>0;j--) {
+				util[j]=util[j-1];
+			}
 			util[i]=newUtil;
 			moves[i]=new int[] {x,y,xn,yn};
+			for(int j=i+1;j<3;j++) {
+				
+			}
 			break;
 		}
 		}
@@ -337,11 +358,11 @@ public class CheckersAI {
 		}
 		
 		public boolean validCheck(int x, int y) {
-			if (x<0||y<0) {
+			if (x < 0 || x > 7 || y < 0 || y > 7 ) {
 					return false;
 			}if (board.getPlayer()) {
 				try {
-					if (board.getSpotBool(x, y)) {
+					if (!board.getSpotBool(x, y)) {
 						return false;
 					}
 				} catch (Exception e) {
@@ -359,6 +380,7 @@ public class CheckersAI {
 				}
 			}
 			try {
+				//empty spot check
 				if (board.getSpotBool(x, y)!=true&&board.getSpotBool(x, y)!=false) {
 					return false;
 				}
@@ -368,7 +390,7 @@ public class CheckersAI {
 				return false;
 			}
 
-			if (!main.possibleMoves(x, y) && !board.possibleCap(x, y)) {
+			if (!possibleMoves(x, y) && !board.possibleCap(x, y)) {
 				return false;
 			}
 			return true;
@@ -414,6 +436,48 @@ public class CheckersAI {
 					}
 				} catch (Exception e) {
 				}
+			}
+			return false;
+		}
+		
+		boolean possibleMoves(int x, int y) {
+			try {
+				if (board.getSpotBool(x, y) || board.getCheckKing(x, y)) {
+					try {
+						if (board.validMove(x, y, x + 1, y + 1)) {
+							return true;
+						}
+					} catch (Exception e) {
+					}
+					try {
+						if (board.validMove(x, y, x + 1, y - 1)) {
+							return true;
+						}
+					} catch (Exception e) {
+					}
+				}
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				if (!board.getSpotBool(x, y) || board.getCheckKing(x, y)) {
+					try {
+						if (board.validMove(x, y, x - 1, y + 1)) {
+							return true;
+						}
+					} catch (Exception e) {
+					}
+					try {
+						if (board.validMove(x, y, x - 1, y - 1)) {
+							return true;
+						}
+					} catch (Exception e) {
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			return false;
 		}
