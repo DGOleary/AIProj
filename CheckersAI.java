@@ -162,6 +162,10 @@ public class CheckersAI {
 	public int testMove(int b, int x, int y, int xn, int yn) {
 		if (board.validMove(x, y, xn, yn)) {
 			if (board.checkCap(x, y, xn, yn)) {
+				if(multiCap(xn,yn)) {
+					//5 is a multicap
+					return 5;
+				}
 				//3 is a capture
 				return 3;	
 			} 
@@ -370,6 +374,48 @@ public class CheckersAI {
 			return true;
 		}
 		
-		
-		
+		//caps another piece if there are multiple in a row
+		public boolean multiCap(int x, int y) {
+			if (board.getPlayer() || board.getCheckKing(x, y)) {
+				try {
+					// this if statement works because if it tries to get the team bool of an
+					// empty spot it throws an exception and breaks out of the statement
+					if (board.getSpotBool(x+1, y+1)  != board.getPlayer()) {
+						// same checks as the possible cap function
+						if ((x + 2) < 8 && (y + 2) < 8 && board.getPieceBoard()[x + 2][y + 2].getTeam()=='n') {
+							return true;
+						}
+					}
+				} catch (Exception e) { //Do something with the exception
+				}
+				try {
+					if (board.getSpotBool(x+1, y-1) != board.getPlayer()) {
+						if ((x + 2) < 8 && (y - 2) > -1 && board.getPieceBoard()[x + 2][y - 2].getTeam()=='n') {
+							return true;
+						}
+					}
+				} catch (Exception e) {
+				}
+			}
+			if (!board.getPlayer() ||  board.getCheckKing(x, y)) {
+				try {
+					if (board.getSpotBool(x-1, y+1) != board.getPlayer()) {
+						if ((x - 2) > -1 && (y + 2) < 8 && board.getPieceBoard()[x - 2][y + 2].getTeam()=='n') {
+							return true;
+						}
+					}
+				} catch (Exception e) {
+				}
+				try {
+					if (board.getSpotBool(x-1, y-1) != board.getPlayer()) {
+						if ((x - 2) > -1 && (y - 2) > -1 && board.getPieceBoard()[x - 2][y - 2].getTeam()=='n') {
+							return true;
+						}
+					}
+				} catch (Exception e) {
+				}
+			}
+			return false;
+		}
+
 }
