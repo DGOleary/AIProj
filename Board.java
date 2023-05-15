@@ -4,8 +4,10 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
- * This class represents a checkerboard, with a board of checker objects and a
- * board of strings to display.
+ * @author Darby Oleary
+ * 
+ *         This class represents a checkerboard, with a board of checker objects
+ *         and a board of strings to display.
  */
 public class Board implements Cloneable {
 
