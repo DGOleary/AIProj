@@ -460,6 +460,15 @@ public class Board implements Cloneable {
 	public int getXCount() {
 		return xCount;
 	}
+	
+	/**
+	 * Gets the o count.
+	 *
+	 * @return the o count
+	 */
+	public int getOCount() {
+		return oCount;
+	}
 
 	/**
 	 * Clones the board at its current state.

@@ -145,7 +145,17 @@ public class CheckersAI {
 		if (board[b].validMove(x, y, xn, yn)) {
 			if (board[b].checkCap(x, y, xn, yn)) {
 				if (multiCap(b, xn, yn)) {
+					if (board[b].getPlayer() && board[b].getOCount() <= 3) {
+						return 7;
+					} else if (!board[b].getPlayer() && board[b].getXCount() <= 3) {
+						return 7;
+					}
 					// 5 is a multicap
+					return 5;
+				}
+				if (board[b].getPlayer() && board[b].getOCount() <= 3) {
+					return 5;
+				} else if (!board[b].getPlayer() && board[b].getXCount() <= 3) {
 					return 5;
 				}
 				// 3 is a capture
@@ -568,7 +578,7 @@ public class CheckersAI {
 				checkUtil(moveCheck(k, x, y, x - capOffset, y + capOffset), x, y, x - capOffset, y + capOffset);
 				// if a piece can capture it must by the rules or the game freezes
 				// so this makes sure if there is a possible cap it will be chosen
-				if (util == 3 || util == 5) {
+				if (util == 3 || util == 5 || util == 7) {
 					continue;
 				}
 				// checks king moves
@@ -581,7 +591,7 @@ public class CheckersAI {
 				checkUtil(moveCheck(k, x, y, x + capOffset, y - capOffset), x, y, x + capOffset, y - capOffset);
 				checkUtil(moveCheck(k, x, y, x + capOffset, y + capOffset), x, y, x + capOffset, y + capOffset);
 				// same as above
-				if (util == 3 || util == 5) {
+				if (util == 3 || util == 5 || util == 7) {
 					continue;
 				}
 				// checks moves all pieces can make
@@ -631,7 +641,7 @@ public class CheckersAI {
 				initUtil[i] = newUtil;
 				initMoves[i] = new int[] { x, y, xn, yn };
 				// return true to say that it was a capture move because it must be made
-				if (newUtil == 3 || newUtil == 5) {
+				if (newUtil == 3 || newUtil == 5 || util == 7) {
 					return true;
 				}
 				return false;
@@ -679,8 +689,10 @@ public class CheckersAI {
 			if (board[0].getCheckKing(x, y)) {
 
 				// checks caps only the king can make
-				checkInitialUtil(moveCheck(0, x, y, x + capOffset, y + capOffset), x, y, x + capOffset, y + capOffset);
-				checkInitialUtil(moveCheck(0, x, y, x + capOffset, y - capOffset), x, y, x + capOffset, y - capOffset);
+				capped = checkInitialUtil(moveCheck(0, x, y, x + capOffset, y + capOffset), x, y, x + capOffset,
+						y + capOffset);
+				capped = checkInitialUtil(moveCheck(0, x, y, x + capOffset, y - capOffset), x, y, x + capOffset,
+						y - capOffset);
 				// all moves have to be checked when it is a king otherwise the
 				// king's regular moves could override a capture
 				capped = checkInitialUtil(moveCheck(0, x, y, x - capOffset, y - capOffset), x, y, x - capOffset,
