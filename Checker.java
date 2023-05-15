@@ -122,9 +122,10 @@ public class Checker implements Cloneable {
 	}
 
 	/**
-	 * Clones a checker object
+	 * Clones a checker object.
 	 *
 	 * @return a clone of the checker
+	 * @throws CloneNotSupportedException the clone not supported exception
 	 */
 	protected Object clone() throws CloneNotSupportedException {
 		Checker temp = new Checker();
@@ -135,7 +136,6 @@ public class Checker implements Cloneable {
 			temp.y = this.y;
 			temp.label = this.label;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (this.getKing()) {

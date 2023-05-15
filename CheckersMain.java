@@ -2,61 +2,63 @@ package checker;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+
 /**
  * The Class CheckersMain that functions as the model of the game.
  */
 //Model class for the game, it just prints out the statements currently but when the GUI is implemented it will instead send messages to the view to update the display
 public class CheckersMain {
 
-	//player true is black/x, player false is red/o
+	// player true is black/x, player false is red/o
 	protected PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-	
+
 	/** The gameboard. */
 	private Board board;
 
 	/**
 	 * Main function that will run the game.
 	 */
-	public CheckersMain(boolean ai) {
+	public CheckersMain() {
 		board = new Board();
 	}
+
+	/**
+	 * Makes move given by player, checks for winners, and makes sure the move is
+	 * valid.
+	 *
+	 * @param px the initial x position
+	 * @param py the initial y position
+	 * @param sx the second x position
+	 * @param sy the second x position
+	 * @return true, if successful
+	 */
 	public boolean makeMove(int px, int py, int sx, int sy) {
-		if (board.getWon()) {
-			String winner="Red";
-			if(board.getWinner().equals("X")) {
-				winner="Black";
-			}
-			this.pcs.firePropertyChange("label", null, winner+" Wins!");
-			return false;
-		}else {
+		if (!board.getWon()) {
 			try {
-				//checks for the correct team playing
-			if (board.getPlayer()!=board.getSpotBool(px,py)) {
-				this.pcs.firePropertyChange("error", null, "Pick a piece that is your color");
-				return false;
-			} 
-			}catch (Exception e) {
+				// checks for the correct team playing
+				if (board.getPlayer() != board.getSpotBool(px, py)) {
+					this.pcs.firePropertyChange("error", null, "Pick a piece that is your color");
+					return false;
+				}
+			} catch (Exception e) {
 				this.pcs.firePropertyChange("error", null, "Pick a piece that is your color");
 				return false;
 			}
 			if (!moveCheck(px, py)) {
 				return false;
 			}
-			
-			//takes in error message or message that the move passed
-			String move=board.makeMove(px, py, sx, sy);
-			if(!move.equals("pass")) {
-				System.out.println(move);
+
+			// takes in error message or message that the move passed
+			String move = board.makeMove(px, py, sx, sy);
+			if (!move.equals("pass")) {
 				this.pcs.firePropertyChange("error", null, move);
 				return false;
 			}
-			
+
 		}
-		board.printBoard();
 		return true;
 	}
-	
-	
+
 	/**
 	 * Checks to make sure the move inputed is valid by the standards of the game.
 	 *
@@ -64,10 +66,11 @@ public class CheckersMain {
 	 * @return true, if successful
 	 */
 	public boolean moveCheck(int x, int y) {
-		if (x<0||y<0) {
-				this.pcs.firePropertyChange("error", null, "Incorrect move, pick a piece before picking a spot to move to");
-				return false;
-		}if (board.getPlayer()) {
+		if (x < 0 || y < 0) {
+			this.pcs.firePropertyChange("error", null, "Incorrect move, pick a piece before picking a spot to move to");
+			return false;
+		}
+		if (board.getPlayer()) {
 			if (board.getSpot(x, y).equals("|o|") || board.getSpot(x, y).equals("|O|")) {
 				this.pcs.firePropertyChange("error", null, "Incorrect move, you are playing as Black");
 				return false;
@@ -99,71 +102,78 @@ public class CheckersMain {
 	 * @param y The y of the piece
 	 * @return true, if successful
 	 */
-	
-	//add public/private
-	//handle exception
-	//simplify code with loop
-	boolean possibleMoves(int x, int y) {
+
+	private boolean possibleMoves(int x, int y) {
+		// code repeats because the king and normal moves need to be separate so it
+		// would need two loops, and only 4 moves are made so it's more simple to just
+		// hardcode each possible move
 		try {
 			if (board.getSpotBool(x, y) || board.getCheckKing(x, y)) {
-				try {
-					if (board.validMove(x, y, x + 1, y + 1)) {
-						return true;
-					}
-				} catch (Exception e) {
+				if (board.validMove(x, y, x + 1, y + 1)) {
+					return true;
 				}
-				try {
-					if (board.validMove(x, y, x + 1, y - 1)) {
-						return true;
-					}
-				} catch (Exception e) {
+				if (board.validMove(x, y, x + 1, y - 1)) {
+					return true;
 				}
 			}
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			System.out.println("Ilegal move attempted Exception");
 		}
 		try {
 			if (!board.getSpotBool(x, y) || board.getCheckKing(x, y)) {
-				try {
-					if (board.validMove(x, y, x - 1, y + 1)) {
-						return true;
-					}
-				} catch (Exception e) {
+				if (board.validMove(x, y, x - 1, y + 1)) {
+					return true;
 				}
-				try {
-					if (board.validMove(x, y, x - 1, y - 1)) {
-						return true;
-					}
-				} catch (Exception e) {
+				if (board.validMove(x, y, x - 1, y - 1)) {
+					return true;
 				}
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Ilegal move attempted Exception");
 		}
 		return false;
 	}
-	
-	public boolean kingGet(int x,int y) {
-		return board.getCheckKing(x,y);
+
+	/**
+	 * Gets if the piece at that spot is a king.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @return true, if king
+	 */
+	public boolean kingGet(int x, int y) {
+		return board.getCheckKing(x, y);
 	}
-	
-	public boolean teamGet(int x,int y) {
+
+	/**
+	 * Returns what team the piece at the spot is.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @return true, if x, false if o or not a spot
+	 */
+	public boolean teamGet(int x, int y) {
 		try {
-		return board.getSpotBool(x,y);
-		} catch(Exception e) {
+			return board.getSpotBool(x, y);
+		} catch (Exception e) {
 			return false;
 		}
 	}
-	
+
+	/**
+	 * @return returns a pointer to the board
+	 */
 	public Board getBoard() {
 		return board;
 	}
-	
+
+	/**
+	 * @return returns the checker at that spot
+	 */
 	public boolean getPlayer() {
 		return board.getPlayer();
 	}
+
 	/**
 	 * @param listener
 	 */
@@ -177,6 +187,7 @@ public class CheckersMain {
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		this.pcs.removePropertyChangeListener(listener);
 	}
+
 	/**
 	 * @param listener
 	 */

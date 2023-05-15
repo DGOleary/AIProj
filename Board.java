@@ -7,12 +7,12 @@ import java.beans.PropertyChangeSupport;
  * This class represents a checkerboard, with a board of checker objects and a
  * board of strings to display.
  */
-public class Board implements Cloneable{
+public class Board implements Cloneable {
 
 	protected PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
 	/** The game board, the board that is printed out to the console. */
-	private String gameBoard[][]; //make public static final int
+	private String gameBoard[][]; // make public static final int
 
 	/** The piece board, the board holding the checkers and the information. */
 	private Checker pieceBoard[][];
@@ -30,7 +30,6 @@ public class Board implements Cloneable{
 
 	/** The o count. */
 	private int oCount;
-	
 
 	/**
 	 * Instantiates a new board.
@@ -83,19 +82,19 @@ public class Board implements Cloneable{
 		// this code finds the diagonal spot in between the player spot and the
 		// spot being moved to, to check if there is a piece to capture in the middle
 		// and the spot being jumped to is empty
-		int offsetX=-1;
-		int offsetY=-1;
-		if(x<xn) {
-			offsetX=1;
+		int offsetX = -1;
+		int offsetY = -1;
+		if (x < xn) {
+			offsetX = 1;
 		}
-		if(y<yn) {
-			offsetY=1;
+		if (y < yn) {
+			offsetY = 1;
 		}
 		try {
-		if((player!=pieceBoard[x+offsetX][y+offsetY].getTeamBool())&&pieceBoard[xn][yn].getTeam()=='n') {
-			return true;
-		}
-		}catch( Exception e) {
+			if ((player != pieceBoard[x + offsetX][y + offsetY].getTeamBool()) && pieceBoard[xn][yn].getTeam() == 'n') {
+				return true;
+			}
+		} catch (Exception e) {
 			return false;
 		}
 		return false;
@@ -132,29 +131,29 @@ public class Board implements Cloneable{
 		if (x < 0 || x > 7 || y < 0 || y > 7 || xn < 0 || xn > 7 || yn < 0 || yn > 7) {
 			return false;
 		}
-		//makes sure move is diagonal
-		if(x==xn||y==yn) {
+		// makes sure move is diagonal
+		if (x == xn || y == yn) {
 			return false;
 		}
-		
+
 		// checks for moving onto a piece
 		if (pieceBoard[xn][yn].getTeam() != 'n') {
 			return false;
 		}
-		//checks to make sure move is in range
-		if(!(Math.abs(x-xn)==1&&Math.abs(y-yn)==1)) {	
-			if(!checkCap(x, y,  xn, yn)) {
-			return false;
+		// checks to make sure move is in range
+		if (!(Math.abs(x - xn) == 1 && Math.abs(y - yn) == 1)) {
+			if (!checkCap(x, y, xn, yn)) {
+				return false;
 			}
 		}
-		//makes sure moves are in the right direction if not a king
-		if(!pieceBoard[x][y].getKing()) {
-			if(player) {
-				if(x>xn) {
+		// makes sure moves are in the right direction if not a king
+		if (!pieceBoard[x][y].getKing()) {
+			if (player) {
+				if (x > xn) {
 					return false;
 				}
-			}else {
-				if(x<xn) {
+			} else {
+				if (x < xn) {
 					return false;
 				}
 			}
@@ -206,6 +205,13 @@ public class Board implements Cloneable{
 				} else {
 					oCount--;
 				}
+				if (getWon()) {
+					String winner = "Red";
+					if (getWinner().equals("X")) {
+						winner = "Black";
+					}
+					this.pcs.firePropertyChange("label", null, winner + " Wins!");
+				}
 				// variable to check if a piece was captured so it can do a check for a
 				// multicapture later
 				cap = true;
@@ -214,7 +220,7 @@ public class Board implements Cloneable{
 				pieceBoard[Math.min(x, xn) + 1][Math.min(y, yn) + 1] = new Checker();
 				gameBoard[Math.min(x, xn) + 1][Math.min(y, yn)
 						+ 1] = pieceBoard[Math.min(x, xn) + 1][Math.min(y, yn) + 1].getLabel();
-				this.pcs.firePropertyChange("kill",null,new int[] {Math.min(x,xn)+1,Math.min(y,yn)+1});
+				this.pcs.firePropertyChange("kill", null, new int[] { Math.min(x, xn) + 1, Math.min(y, yn) + 1 });
 			} else if (possibleCap(x, y)) {
 				return "If there is a piece you can capture you must capture it";
 			}
@@ -225,13 +231,13 @@ public class Board implements Cloneable{
 			checkKing(xn, yn);
 			gameBoard[x][y] = pieceBoard[x][y].getLabel();
 			gameBoard[xn][yn] = pieceBoard[xn][yn].getLabel();
-			this.pcs.firePropertyChange("move",new int[] {x,y} ,new int[] {xn,yn});
+			this.pcs.firePropertyChange("move", new int[] { x, y }, new int[] { xn, yn });
 			// checks if the piece can do a multicapture after capturing a previous piece
 			if (possibleCap(xn, yn) && cap) {
 				multiCap(xn, yn);
 			} else {
 				player = !player;
-				this.pcs.firePropertyChange("turn", null ,player);
+				this.pcs.firePropertyChange("turn", null, player);
 				return "pass";
 			}
 			return "pass";
@@ -239,7 +245,7 @@ public class Board implements Cloneable{
 		// fails if the move inputed is not possible
 		return "Illegal Move";
 	}
-	
+
 	/**
 	 * Gets if the game is won.
 	 *
@@ -259,8 +265,16 @@ public class Board implements Cloneable{
 	public String getSpot(int x, int y) {
 		return gameBoard[x][y];
 	}
-	
-	public boolean getSpotBool(int x, int y) throws Exception{
+
+	/**
+	 * Gets the spot boolean.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @return the boolean of the spot
+	 * @throws Exception if the spot has no piece
+	 */
+	public boolean getSpotBool(int x, int y) throws Exception {
 		return pieceBoard[x][y].getTeamBool();
 	}
 
@@ -290,25 +304,33 @@ public class Board implements Cloneable{
 		}
 		return "";
 	}
-	
-	public Checker[][] getPieceBoard(){
+
+	/**
+	 * Gets the piece board.
+	 *
+	 * @return the piece board
+	 */
+	public Checker[][] getPieceBoard() {
 		return pieceBoard;
 	}
 
 	/**
-	 * Checks if it is possible to cap.
-	 *
+	 * Checks if it is possible to cap. checks if there is a possible capture to
+	 * make and forces the player to make it if so takes in the location of the
+	 * piece to be moved
+	 * 
 	 * @param x The x of the spot
 	 * @param y The y of the spot
 	 * @return true, if successful
 	 */
-//checks if there is a possible capture to make and forces the player to make it if so
-//takes in the location of the piece to be moved
 	public boolean possibleCap(int x, int y) {
-		if (x < 0 || x > 7 || y < 0 || y > 7 ) {
+		if (x < 0 || x > 7 || y < 0 || y > 7) {
 			return false;
 		}
 		// checks in every direction the piece is able to move
+		// code repeats because the king and normal moves need to be separate so it
+		// would need two loops, and only 4 moves are made so it's more simple to just
+		// hardcode each possible move
 		if (player || getCheckKing(x, y)) {
 			try {
 				// this if statement works because if it tries to get the team bool of an
@@ -316,44 +338,47 @@ public class Board implements Cloneable{
 				if (pieceBoard[x + 1][y + 1].getTeamBool() != player) {
 					// each of these lines is for a different diagonal direction from the piece to
 					// check if it can cap there
-					if ((x + 2) < 8 && (y + 2) < 8 && pieceBoard[x + 2][y + 2].getTeam()=='n') {
+					if ((x + 2) < 8 && (y + 2) < 8 && pieceBoard[x + 2][y + 2].getTeam() == 'n') {
 						return true;
 					}
 				}
 			} catch (Exception e) {
+				System.out.println("Ilegal move attempted Exception");
 			}
 			try {
 				if (pieceBoard[x + 1][y - 1].getTeamBool() != player) {
-					if ((x + 2) < 8 && (y - 2) > -1 && pieceBoard[x + 2][y - 2].getTeam()=='n') {
+					if ((x + 2) < 8 && (y - 2) > -1 && pieceBoard[x + 2][y - 2].getTeam() == 'n') {
 						return true;
 					}
 				}
 			} catch (Exception e) {
+				System.out.println("Ilegal move attempted Exception");
 			}
 		}
 		if (!player || getCheckKing(x, y)) {
 			try {
 				if (pieceBoard[x - 1][y + 1].getTeamBool() != player) {
-					if ((x - 2) > -1 && (y + 2) < 8 && pieceBoard[x - 2][y + 2].getTeam()=='n') {
+					if ((x - 2) > -1 && (y + 2) < 8 && pieceBoard[x - 2][y + 2].getTeam() == 'n') {
 						return true;
 					}
 				}
 			} catch (Exception e) {
+				System.out.println("Ilegal move attempted Exception");
 			}
 			try {
 				if (pieceBoard[x - 1][y - 1].getTeamBool() != player) {
-					if ((x - 2) > -1 && (y - 2) > -1 && pieceBoard[x - 2][y - 2].getTeam()=='n') {
+					if ((x - 2) > -1 && (y - 2) > -1 && pieceBoard[x - 2][y - 2].getTeam() == 'n') {
 						return true;
 					}
 				}
 			} catch (Exception e) {
+				System.out.println("Ilegal move attempted Exception");
 			}
 		}
 		return false;
 
 	}
-	
-	
+
 	/**
 	 * Multicapture function that allows for a double move when a move is made that
 	 * opens the player up to capturing another piece immediately.
@@ -361,56 +386,56 @@ public class Board implements Cloneable{
 	 * @param x the x
 	 * @param y the y
 	 */
-	
-	//simply repeated code
-//caps another piece if there are multiple in a row
 	public void multiCap(int x, int y) {
+		// code repeats because the king and normal moves need to be separate so it
+		// would need two loops, and only 4 moves are made so it's more simple to just
+		// hardcode each possible move
 		if (player || getCheckKing(x, y)) {
 			try {
 				// this if statement works because if it tries to get the team bool of an
 				// empty spot it throws an exception and breaks out of the statement
 				if (pieceBoard[x + 1][y + 1].getTeamBool() != player) {
 					// same checks as the possible cap function
-					if ((x + 2) < 8 && (y + 2) < 8 && pieceBoard[x + 2][y + 2].getTeam()=='n') {
-						System.out.println("Multi-Capture!");
+					if ((x + 2) < 8 && (y + 2) < 8 && pieceBoard[x + 2][y + 2].getTeam() == 'n') {
 						// makes the move for the player because they would be forced to anyways
 						makeMove(x, y, x + 2, y + 2);
 					}
 				}
-			} catch (Exception e) { //Do something with the exception
+			} catch (Exception e) {
+				System.out.println("Ilegal move attempted Exception");
 			}
 			try {
 				if (pieceBoard[x + 1][y - 1].getTeamBool() != player) {
-					if ((x + 2) < 8 && (y - 2) > -1 && pieceBoard[x + 2][y - 2].getTeam()=='n') {
-						System.out.println("Multi-Capture!");
+					if ((x + 2) < 8 && (y - 2) > -1 && pieceBoard[x + 2][y - 2].getTeam() == 'n') {
 						makeMove(x, y, x + 2, y - 2);
 					}
 				}
 			} catch (Exception e) {
+				System.out.println("Ilegal move attempted Exception");
 			}
 		}
 		if (!player || getCheckKing(x, y)) {
 			try {
 				if (pieceBoard[x - 1][y + 1].getTeamBool() != player) {
-					if ((x - 2) > -1 && (y + 2) < 8 && pieceBoard[x - 2][y + 2].getTeam()=='n') {
-						System.out.println("Multi-Capture!");
+					if ((x - 2) > -1 && (y + 2) < 8 && pieceBoard[x - 2][y + 2].getTeam() == 'n') {
 						makeMove(x, y, x - 2, y + 2);
 					}
 				}
 			} catch (Exception e) {
+				System.out.println("Ilegal move attempted Exception");
 			}
 			try {
 				if (pieceBoard[x - 1][y - 1].getTeamBool() != player) {
-					if ((x - 2) > -1 && (y - 2) > -1 && pieceBoard[x - 2][y - 2].getTeam()=='n') {
-						System.out.println("Multi-Capture!");
+					if ((x - 2) > -1 && (y - 2) > -1 && pieceBoard[x - 2][y - 2].getTeam() == 'n') {
 						makeMove(x, y, x - 2, y - 2);
 					}
 				}
 			} catch (Exception e) {
+				System.out.println("Ilegal move attempted Exception");
 			}
 		}
 	}
-	
+
 	/**
 	 * @param listener
 	 */
@@ -424,30 +449,41 @@ public class Board implements Cloneable{
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		this.pcs.removePropertyChangeListener(listener);
 	}
-	
+
+	/**
+	 * Gets the x count.
+	 *
+	 * @return the x count
+	 */
 	public int getXCount() {
 		return xCount;
 	}
-	protected Object clone() throws CloneNotSupportedException{
-		Board temp=new Board();
+
+	/**
+	 * Clones the board at its current state.
+	 *
+	 * @return a clone of the board
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
+	protected Object clone() throws CloneNotSupportedException {
+		Board temp = new Board();
 		try {
-			temp=new Board();
-			temp.gameBoard=new String[8][8];
-			temp.pieceBoard=new Checker[8][8];
-			temp.xCount=this.xCount;
-			temp.oCount=this.oCount;
-			temp.player=this.player;
-			temp.won=this.won;
+			temp = new Board();
+			temp.gameBoard = new String[8][8];
+			temp.pieceBoard = new Checker[8][8];
+			temp.xCount = this.xCount;
+			temp.oCount = this.oCount;
+			temp.player = this.player;
+			temp.won = this.won;
 			for (int i = 0; i < 8; i++) {
-	            for (int j = 0; j < 8; j++) {
-	                temp.pieceBoard[i][j] = (Checker) this.pieceBoard[i][j].clone();
-	            }
-	        }
+				for (int j = 0; j < 8; j++) {
+					temp.pieceBoard[i][j] = (Checker) this.pieceBoard[i][j].clone();
+				}
+			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return temp;
 	}
-	
+
 }
