@@ -8,7 +8,7 @@ package checker;
  *         Class that represents a spot on a checker board, being empty or
  *         having a piece on it
  */
-public class Checker implements Cloneable{
+public class Checker implements Cloneable {
 	private boolean king;
 	private char team;
 	private int x;
@@ -46,10 +46,20 @@ public class Checker implements Cloneable{
 		}
 	}
 
+	/**
+	 * Returns if this checker is a king.
+	 * 
+	 * @return true if king, false if not
+	 */
 	public boolean getKing() {
 		return king;
 	}
 
+	/**
+	 * Gets the position.
+	 *
+	 * @return the position as an array of length 2
+	 */
 	public int[] getPos() {
 		return new int[] { x, y };
 	}
@@ -66,6 +76,11 @@ public class Checker implements Cloneable{
 		}
 	}
 
+	/**
+	 * Gets the team.
+	 *
+	 * @return the team
+	 */
 	public char getTeam() {
 		return team;
 	}
@@ -105,20 +120,25 @@ public class Checker implements Cloneable{
 	public String getLabel() {
 		return label;
 	}
-	
-	protected Object clone() throws CloneNotSupportedException{
-		Checker temp=new Checker();
+
+	/**
+	 * Clones a checker object
+	 *
+	 * @return a clone of the checker
+	 */
+	protected Object clone() throws CloneNotSupportedException {
+		Checker temp = new Checker();
 		try {
-			temp.king=this.king;
-			temp.team=this.team;
-			temp.x=this.x;
-			temp.y=this.y;
-			temp.label=this.label;
+			temp.king = this.king;
+			temp.team = this.team;
+			temp.x = this.x;
+			temp.y = this.y;
+			temp.label = this.label;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(this.getKing()) {
+		if (this.getKing()) {
 			temp.makeKing();
 		}
 		return temp;
