@@ -21,7 +21,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 /**
- * The view class for checkers, allows for 2 players or 1 player vs AI.
+ * @author Darby Oleary
+ * 
+ *         The view class for checkers, allows for 2 players or 1 player vs AI.
  */
 public class CheckersRunner extends Application implements PropertyChangeListener, EventHandler<ActionEvent> {
 	private Scene scene;
@@ -230,14 +232,14 @@ public class CheckersRunner extends Application implements PropertyChangeListene
 			// sets label to error message when a wrong move is attempted
 			if (ai && main.getPlayer()) {
 				output.setText((String) evt.getNewValue());
-				//resets piece chosen
-				pieceX=-1;
-				pieceY=-1;
+				// resets piece chosen
+				pieceX = -1;
+				pieceY = -1;
 			} else if (!ai) {
 				output.setText((String) evt.getNewValue());
-				//resets piece chosen
-				pieceX=-1;
-				pieceY=-1;
+				// resets piece chosen
+				pieceX = -1;
+				pieceY = -1;
 			}
 		} else if (evt.getPropertyName().equals("kill")) {
 			// removes a piece from the board

@@ -3,9 +3,11 @@ package checker;
 import java.util.Stack;
 
 /**
- * The AI for the checkers game, works by checking every piece for the best
- * moves, and then going 4 turns ahead to attempt to determine what move will be
- * the best.
+ * @author Darby Oleary
+ * 
+ *         The AI for the checkers game, works by checking every piece for the
+ *         best moves, and then going 4 turns ahead to attempt to determine what
+ *         move will be the best.
  */
 public class CheckersAI {
 	// value of the move

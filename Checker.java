@@ -1,7 +1,5 @@
 package checker;
 
-//add javadocs
-
 /**
  * @author Darby Oleary
  *

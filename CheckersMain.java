@@ -4,9 +4,10 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
- * The Class CheckersMain that functions as the model of the game.
+ * @author Darby Oleary
+ * 
+ *         The Class CheckersMain that functions as the model of the game.
  */
-//Model class for the game, it just prints out the statements currently but when the GUI is implemented it will instead send messages to the view to update the display
 public class CheckersMain {
 
 	// player true is black/x, player false is red/o
